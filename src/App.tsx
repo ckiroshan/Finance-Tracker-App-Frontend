@@ -1,5 +1,6 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Auth } from "./pages/auth";
 
 function App() {
   return (
@@ -7,7 +8,7 @@ function App() {
       <div className="app-container">
         <Routes>
           <Route path="/" element={<h1>Dashboard</h1>} />
-          <Route path="/auth" element={<h1>Sign In</h1>} />
+          <Route path="/auth" element={<Auth />} />
         </Routes>
       </div>
     </Router>
