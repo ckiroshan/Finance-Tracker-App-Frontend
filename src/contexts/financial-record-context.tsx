@@ -95,7 +95,7 @@ export const FinancialRecordsProvider = ({ children }: { children: React.ReactNo
     } catch (err) {}
   };
 
-  return <FinancialRecordsContext.Provider value={{ records, addRecord, updateRecord }}>{children}</FinancialRecordsContext.Provider>;
+  return <FinancialRecordsContext.Provider value={{ records, addRecord, updateRecord, deleteRecord }}>{children}</FinancialRecordsContext.Provider>;
 };
 
 export const useFinancialRecords = () => {
