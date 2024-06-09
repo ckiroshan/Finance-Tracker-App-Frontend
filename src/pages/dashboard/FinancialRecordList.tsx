@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { FinancialRecord, useFinancialRecords } from "../../contexts/financial-record-context";
-import { useTable, Column, CellProps, Row } from "react-table";
+import Alert from "../../components/alert/alert";
 
 interface EditableCellProps extends CellProps<FinancialRecord> {
   updateRecord: (rowIndex: number, columnId: string, value: any) => void;
@@ -25,10 +25,25 @@ const EditableCell: React.FC<EditableCellProps> = ({ value: initialValue, row, c
 
 export const FinancialRecordList = () => {
   const { records, updateRecord, deleteRecord } = useFinancialRecords();
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [recordToDelete, setRecordToDelete] = useState<FinancialRecord | null>(null);
 
   const updateCellRecord = (rowIndex: number, columnId: string, value: any) => {
     const id = records[rowIndex]?._id;
     updateRecord(id ?? "", { ...records[rowIndex], [columnId]: value });
+  };
+
+  const handleConfirmDelete = () => {
+    if (recordToDelete) {
+      deleteRecord(recordToDelete._id ?? "");
+      setIsAlertVisible(false);
+      setRecordToDelete(null);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setIsAlertVisible(false);
+    setRecordToDelete(null);
   };
 
   const columns: Array<Column<FinancialRecord>> = useMemo(
@@ -59,10 +74,16 @@ export const FinancialRecordList = () => {
         Cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable={false} />,
       },
       {
-        Header: "Delete",
+        Header: "Action",
         id: "delete",
         Cell: ({ row }) => (
-          <button onClick={() => deleteRecord(row.original._id ?? "")} className="button">
+          <button
+            onClick={() => {
+              setRecordToDelete(row.original);
+              setIsAlertVisible(true);
+            }}
+            className="btn btn-delete"
+          >
             Delete
           </button>
         ),
@@ -77,6 +98,7 @@ export const FinancialRecordList = () => {
   });
   return (
     <div className="table-container">
+      {isAlertVisible && <Alert title="Confirm Delete" description={`Are you sure you want to delete "${recordToDelete?.description}" from the list?`} onConfirm={handleConfirmDelete} onCancel={handleCancelDelete} />}
       <table {...getTableProps()} className="table">
         <thead>
           {headerGroups.map((hg) => (
