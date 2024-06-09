@@ -1,0 +1,15 @@
+.footer {
+  background: #15dd68 linear-gradient(to right, #11998e, #38ef7d);
+  text-align: center;
+  padding: 10px 0;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+}
+
+.footer-content {
+  font-family: 'Roboto','Times New Roman', Times, serif;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
